@@ -88,8 +88,8 @@ function ESX.Progressbar(message, length, Options)
 end
 
 function ESX.ShowNotification(message, type, length)
-    if GetResourceState("esx_notify") ~= "missing" then
-        return exports["esx_notify"]:Notify(type, length, message)
+    if GetResourceState("mythic_notify") ~= "missing" then
+		return exports['mythic_notify']:DoHudText('inform', message)
     end
 
     print("[^1ERROR^7] ^5ESX Notify^7 is Missing!")
