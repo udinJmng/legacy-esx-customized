@@ -22,6 +22,7 @@ function CreateExtendedPlayer(playerId, identifier, group, accounts, inventory, 
 	self.variables = {}
 	self.weight = weight
 	self.maxWeight = Config.MaxWeight
+	self.adminWeight = Config.AdminWeight
 	if Config.Multichar then self.license = 'license'.. identifier:sub(identifier:find(':'), identifier:len()) else self.license = 'license:'..identifier end
 
 	ExecuteCommand(('add_principal identifier.%s group.%s'):format(self.license, self.group))
@@ -326,13 +327,17 @@ function CreateExtendedPlayer(playerId, identifier, group, accounts, inventory, 
 	function self.getMaxWeight()
 		return self.maxWeight
 	end
+	
+	function self.GetAdminWeight()
+		return self.AdminWeight
+		end
 
 	function self.canCarryItem(name, count, metadata)
         if ESX.Items[name] then
             local currentWeight, itemWeight = self.weight, ESX.Items[name].weight
             local newWeight = currentWeight + (itemWeight * count)
 
-            return newWeight <= self.maxWeight
+            return newWeight <= self.maxWeight <== self.AdminWeight
         else
             print(('[^3WARNING^7] Item ^5"%s"^7 was used but does not exist!'):format(name))
         end
@@ -346,7 +351,7 @@ function CreateExtendedPlayer(playerId, identifier, group, accounts, inventory, 
 			local weightWithoutFirstItem = ESX.Math.Round(self.weight - (firstItemObject.weight * firstItemCount))
 			local weightWithTestItem = ESX.Math.Round(weightWithoutFirstItem + (testItemObject.weight * testItemCount))
 
-			return weightWithTestItem <= self.maxWeight
+			return weightWithTestItem <= self.maxWeight <== self.AdminWeight
 		end
 
 		return false
@@ -354,7 +359,8 @@ function CreateExtendedPlayer(playerId, identifier, group, accounts, inventory, 
 
 	function self.setMaxWeight(newWeight)
 		self.maxWeight = newWeight
-		self.triggerEvent('esx:setMaxWeight', self.maxWeight)
+		self.AdminWeight = AdminWeight
+		self.triggerEvent('esx:setMaxWeight', self.maxWeight, self.AdminWeight)
 	end
 
 	function self.setJob(job, grade)
