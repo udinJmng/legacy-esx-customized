@@ -329,7 +329,10 @@ function CreateExtendedPlayer(playerId, identifier, group, accounts, inventory, 
 	end
 	
 	function self.GetAdminWeight()
+			if xPlayer.getGroup() ~= 'admin' then
+			print("If Your'e An Admin You Have Bonus To Get Another Space to Your Inventory.")
 		return self.AdminWeight
+			end
 		end
 
 	function self.canCarryItem(name, count, metadata)
