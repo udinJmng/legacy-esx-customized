@@ -139,8 +139,9 @@ Core.PlayerFunctionOverrides.OxInventory = {
   setMaxWeight = function(self)
     return function(newWeight)
       self.maxWeight = newWeight
-      self.triggerEvent('esx:setMaxWeight', self.maxWeight)
-      return Inventory.Set(self.source, 'maxWeight', newWeight)
+      self.AdminWeight = AdminWeight
+      self.triggerEvent('esx:setMaxWeight', self.maxWeight, self.AdminWeight)
+      return Inventory.Set(self.source, 'maxWeight', newWeight, AdminWeight)
     end
   end,
 
@@ -204,7 +205,7 @@ Core.PlayerFunctionOverrides.OxInventory = {
 
   syncInventory = function(self)
     return function(weight, maxWeight, items, money)
-      self.weight, self.maxWeight = weight, maxWeight
+      self.weight, self.maxWeight, self.AdminWeight = weight, maxWeight, AdminWeight
       self.inventory = items
 
       if money then
